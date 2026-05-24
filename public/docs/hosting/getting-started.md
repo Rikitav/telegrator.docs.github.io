@@ -23,7 +23,7 @@ using Telegrator.Hosting;
 var builder = Host.CreateApplicationBuilder(args);
 
 builder.AddTelegrator() // 1. Add Telegrator with Polling (Long-polling)
-    .WithWeb() // 2. Add update receiving method
+    .WithPolling() // 2. Add update receiving method
     .Handlers.CollectHandlers(); // 3. Register handlers using source generator
 
 // 4. Configure your bot token
