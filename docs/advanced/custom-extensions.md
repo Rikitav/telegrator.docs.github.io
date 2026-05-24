@@ -1,3 +1,8 @@
+---
+title: "Custom Extensions"
+description: "Extend filters, state keepers, and more."
+---
+
 # Custom Extensions
 
 You can extend Telegrator by creating custom filters, aspects, and state keepers.
@@ -70,22 +75,35 @@ public class MyDatabaseStorage : IStateStorage
 ```
 
 ## Automatic Handler Discovery
-Telegrator provides automatic discovery and registration of handlers across your entire application domain using the `CollectHandlersDomainWide()` method.
+
+Telegrator provides high-performance, automatic discovery and registration of handlers using a **Source Generator**.
+
+### Generative Collection (Recommended)
+The `CollectHandlers()` method is generated at compile-time by the Telegrator Source Generator.
 
 **How it works:**
-- Scans all loaded assemblies in the current domain
-- Automatically discovers classes decorated with handler attributes
-- Registers them with the bot without manual registration
+- Scans your source code during compilation.
+- Generates a static method that registers all found handlers.
+- **No reflection** is used at runtime.
+- **Native AOT Compatible**: Since the registration is static, it survives code trimming and works in Native AOT binaries.
 
 **Example:**
 ```csharp
 var bot = new TelegratorClient("<YOUR_BOT_TOKEN>");
-bot.Handlers.CollectHandlersDomainWide(); // Automatically finds and registers all handlers
+bot.Handlers.CollectHandlers(); // Statically compiled discovery
 bot.StartReceiving();
 ```
 
-**Benefits:**
-- No need to manually register each handler
-- Reduces boilerplate code
-- Ensures all handlers are discovered automatically
-- Perfect for large applications with many handlers
+### Reflection-based Collection (Obsolete)
+The `CollectHandlersDomainWide()` and `CollectHandlersAssemblyWide()` methods scan loaded assemblies using reflection.
+
+**Limitations:**
+- Slower than generative collection.
+- Incompatible with **Native AOT** and code trimming.
+- Can be blocked by some security configurations.
+
+**Benefits of Generative Collection:**
+- Significant performance boost during startup.
+- Full support for Trimming and Native AOT.
+- Design-time validation via **DeveloperHelperAnalyzer**.
+- Zero boilerplate while maintaining maximum performance.

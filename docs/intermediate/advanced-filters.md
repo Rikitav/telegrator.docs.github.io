@@ -1,3 +1,8 @@
+---
+title: "Advanced Filters"
+description: "Write your own attribute-based filters."
+---
+
 # Advanced Filters
 
 You can create custom filters by inheriting from `FilterAnnotation<T>`:

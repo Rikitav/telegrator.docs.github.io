@@ -1,3 +1,8 @@
+---
+title: "Getting Started with Hosting"
+description: "Integrate Telegrator with .NET Generic Host for background processing."
+---
+
 # Getting Started with Telegrator.Hosting
 
 The `Telegrator.Hosting` package is the standard way to run your bot as a background service in .NET applications. It provides full integration with the .NET Generic Host, allowing you to use standard Dependency Injection, Logging, and Configuration patterns.
@@ -17,24 +22,25 @@ using Telegrator.Hosting;
 
 var builder = Host.CreateApplicationBuilder(args);
 
-// 1. Add Telegrator core services
-builder.AddTelegrator();
+builder.AddTelegrator() // 1. Add Telegrator with Polling (Long-polling)
+    .WithPolling() // 2. Add update receiving method
+    .Handlers.CollectHandlers(); // 3. Register handlers using source generator
 
-// 2. Configure your bot token (can be in appsettings.json or environment)
+// 4. Configure your bot token
 builder.Services.Configure<TelegratorOptions>(options => {
     options.Token = "YOUR_BOT_TOKEN";
 });
 
-// 3. Register your handlers
-builder.Handlers.CollectHandlersAssemblyWide();
-
 var host = builder.Build();
 
-// 4. Initialize Telegrator (registers commands, starts logging)
+// 5. Initialize Telegrator
 host.UseTelegrator();
 
 await host.RunAsync();
 ```
+
+> [!CAUTION]
+> **Obsolete Method**: `CollectHandlersAssemblyWide()` and other reflection-based discovery methods are now obsolete. Please use the source-generated `CollectHandlers()` method, which is required for Native AOT and better performance.
 
 ## How It Works
 

@@ -1,3 +1,8 @@
+---
+title: "Deployment & Hosting Options"
+description: "Learn to deploy in Console, ASP.NET Core, or Webhooks."
+---
+
 # Integration & Deployment
 
 Telegrator works in console, hosted applications, and ASP.NET Core (webhook) projects.
@@ -12,12 +17,18 @@ class Program
     static void Main(string[] args)
     {
         var bot = new TelegratorClient("<YOUR_BOT_TOKEN>");
-        bot.Handlers.CollectHandlersDomainWide();
+        
+        // Recommended for Native AOT
+        bot.Handlers.CollectHandlers(); 
+        
         bot.StartReceiving();
         Console.ReadLine();
     }
 }
 ```
+
+> [!TIP]
+> `CollectHandlersDomainWide()` is now obsolete. Use the generated `CollectHandlers()` method for better performance and Native AOT compatibility.
 
 ## ASP.NET Core Hosting
 
@@ -30,16 +41,17 @@ using Telegrator.Hosting;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add Telegrator services (with handler collection)
+// 1. Add Telegrator with standard setup
 builder.AddTelegrator(action: b => {
-    b.Handlers.CollectHandlers(); // Standard collection
-});
+    b.Handlers.CollectHandlers(); 
+})
+.WithPolling(); // Use polling for this example
 
 var app = builder.Build();
 
 app.MapFallback(() => "Bot is running...");
 
-// Initialize Telegrator
+// 2. Initialize Telegrator
 app.UseTelegrator();
 
 app.Run();
@@ -63,25 +75,37 @@ using Telegrator.Hosting.Web;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add Telegrator Web services
-builder.AddTelegratorWeb();
+// 1. Add Telegrator with Web integration
+builder.AddTelegrator(action: b => {
+    // 2. Register handlers using source generator
+    b.Handlers.CollectHandlers();
+})
+.WithWeb();
 
-// Configure services
+// 3. Configure services
 builder.Services.AddSingleton<IMyService, MyService>();
-
-// Register handlers
-builder.Handlers.CollectHandlersAssemblyWide();
 
 var app = builder.Build();
 
-// Initialize Telegrator Web (maps webhook endpoint)
-app.UseTelegratorWeb();
+// 4. Initialize Telegrator (maps webhook endpoint)
+app.UseTelegrator();
 
 await app.RunAsync();
 ```
 
-> **How is it working?**
-> 1. **Webhook Integration**: `TelegramBotWebHost` handles incoming webhook requests from Telegram.
+## Native AOT Publishing
+
+Telegrator is designed to work with .NET's Native AOT publishing. This allows you to create high-performance, small-footprint binaries that don't require the .NET runtime to be installed on the target machine.
+
+### Key requirements for AOT:
+1. **Source Generated Handlers**: Use `CollectHandlers()` instead of reflection-based methods.
+2. **JSON Serialization**: Use `System.Text.Json` source generator for any custom objects you store in state.
+3. **No Dynamic Code**: Telegrator's core avoids `Reflection.Emit` and other APIs that are incompatible with trimming.
+
+To publish your bot as Native AOT:
+```shell
+dotnet publish -c Release -r linux-x64 --self-contained
+```
 > 2. **Security**: Supports secret token validation for secure webhook handling.
 > 3. **Scalability**: Webhook hosting is more efficient for high-traffic bots compared to long-polling.
 > 4. **Production Ready**: Includes health checks, logging, and monitoring capabilities.

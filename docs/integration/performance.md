@@ -1,3 +1,8 @@
+---
+title: "Performance Optimization"
+description: "Optimize your bot for high performance."
+---
+
 # Performance Optimization
 
 Optimize your bot for high performance:

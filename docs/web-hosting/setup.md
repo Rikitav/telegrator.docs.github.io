@@ -1,3 +1,8 @@
+---
+title: "Webhook Setup"
+description: "Configuring Webhooks for ASP.NET Core applications."
+---
+
 # Webhook Fundamentals
 
 `Telegrator.Hosting.Web` allows your bot to receive updates via Webhooks instead of long-polling. This is highly recommended for production environments as it's more efficient and reactive.
@@ -17,20 +22,23 @@ using Telegrator.Hosting.Web;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// 1. Add Web-specific Telegrator services
-builder.AddTelegratorWeb();
-
-// 2. Register handlers as usual
-builder.Handlers.CollectHandlersAssemblyWide();
+builder.AddTelegrator() // 1. Add Telegrator
+    .WithWeb(provider => new SqliteConnection($"Data Source={database}")) // 2. Add update receiving method
+    .Handlers.CollectHandlers(); // 3. Register handlers using source generator
 
 var app = builder.Build();
 
-// 3. Map the webhook endpoint
-// Default route is /api/telegrator/update
-app.UseTelegratorWeb();
+// 4. Map the webhook endpoint and initialize
+app.UseTelegrator();
+
+// 5. Optional: Remap webhook to specific URL (e.g. for behind a proxy or cloud host)
+// app.RemapWebhook("https://your-domain.com/api/telegrator/update");
 
 await app.RunAsync();
 ```
+
+> [!CAUTION]
+> **Obsolete Method**: `AddTelegratorWeb()` and `UseTelegratorWeb()` are now replaced by the unified fluent API. Use `.WithWeb()` and `UseTelegrator()` instead.
 
 ## Configuration Options
 

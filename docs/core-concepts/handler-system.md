@@ -1,7 +1,13 @@
+---
+title: "Handler System"
+description: "Learn about the core handler ideas and lifecycle."
+---
+
 # Handler System
 
 Telegrator is built around several core ideas:
 
+- **Native AOT Compatible**: Telegrator is ready for the future with full support for Native AOT. It avoids reflection-based discovery where possible and uses source generation for high performance.
 - **Aspect-Oriented Handlers**: Each handler is a focused, reusable class that reacts to a specific type of update (message, command, callback, etc.).
 - **Aspect-Oriented Programming**: Built-in support for pre and post-execution processing through aspects, enabling separation of cross-cutting concerns.
 - **Mediator Pattern**: All updates are routed through a central `UpdateRouter`, which dispatches them to the appropriate handlers based on filters and priorities.
@@ -10,13 +16,38 @@ Telegrator is built around several core ideas:
 - **Concurrency Control**: Fine-grained control over how many handlers run in parallel, both globally and per-handler.
 
 ## Handler Lifecycle
-1. **Registration**: Handlers are registered with the bot during startup
-2. **Discovery**: The framework automatically discovers handlers using reflection
-3. **Filtering**: Updates are filtered to determine which handlers should run
-4. **Execution**: Selected handlers are executed in order of priority
-5. **Cleanup**: Resources are cleaned up after execution
+1. **Registration**: Handlers are registered with the bot during startup.
+2. **Discovery**: The framework uses a **Source Generator** to discover handlers at compile-time (via `CollectHandlers()`), which is faster than reflection and supports Native AOT.
+3. **Filtering**: Updates are filtered to determine which handlers should run.
+4. **Validation**: The **DeveloperHelperAnalyzer** checks your handler declarations at design-time to prevent common mistakes.
+5. **Execution**: Selected handlers are executed in order of priority.
+6. **Cleanup**: Resources are cleaned up after execution.
 
-## Handler Priority & Importance
+## Base Handler Classes
+
+Telegrator provides specific base classes for almost every Telegram update type, ensuring type safety and code clarity:
+
+- `MessageHandler`: For text and media messages.
+- `CommandHandler`: For bot commands.
+- `CallbackQueryHandler`: For inline button interactions.
+- `EditedMessageHandler`: For message edits.
+- `ChatMemberHandler`: For member status changes.
+- `MyChatMemberHandler`: For the bot's own status changes.
+- `PollHandler`: For poll updates.
+- `AnyUpdateHandler`: The catch-all base class when you need raw `Update` access.
+
+## Handler Metadata (Descriptors)
+
+In the internal system, every handler is represented by a `HandlerDescriptor`. This is an abstract base class with two main implementations:
+- `ClassHandlerDescriptor`: For standard class-based handlers.
+- `MethodHandlerDescriptor`: For implicit handlers created from methods.
+
+## DeveloperHelperAnalyzer
+
+To ensure your bot works perfectly, Telegrator includes a **DeveloperHelperAnalyzer**. It works directly in your IDE (Visual Studio, Rider) and will point out errors such as:
+- Using `[MessageHandler]` on a class that inherits from `CallbackQueryHandler`.
+- Forgetting to make a keyboard generation method `partial`.
+- Missing required handler attributes.
 
 Telegrator provides two mechanisms for controlling execution order:
 

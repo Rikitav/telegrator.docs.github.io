@@ -1,3 +1,8 @@
+---
+title: "State Management Wizard"
+description: "Build a state machine that collects user inputs consecutively."
+---
+
 # State Management Wizard
 
 You can manage sequential tasks using numerical, string-based, or enum states easily.

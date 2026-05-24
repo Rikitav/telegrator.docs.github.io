@@ -1,3 +1,8 @@
+---
+title: "Localization Setup"
+description: "Initializing multi-language support in Telegrator."
+---
+
 # Localization Setup
 
 The `Telegrator.Localized` package allows you to build bots that talk to users in their own language. It uses the standard .NET `IStringLocalizer` ecosystem.
@@ -23,8 +28,11 @@ var builder = Host.CreateApplicationBuilder(args);
 // Add standard .NET localization
 builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
 
-// Add Telegrator
-builder.AddTelegrator();
+// Add Telegrator with standard setup
+builder.AddTelegrator(action: b => {
+    b.Handlers.CollectHandlers();
+})
+.WithPolling();
 
 var host = builder.Build();
 host.UseTelegrator();
