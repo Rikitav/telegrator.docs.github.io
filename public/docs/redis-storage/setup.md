@@ -28,7 +28,7 @@ var builder = Host.CreateApplicationBuilder(args);
 var redis = ConnectionMultiplexer.Connect("localhost:6379");
 builder.Services.AddSingleton<IConnectionMultiplexer>(redis);
 
-// 2. Add Telegrator
+// 2. Add Telegrator as usual
 builder.AddTelegrator();
 
 // 3. Register Redis as the State Storage

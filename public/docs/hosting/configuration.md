@@ -23,8 +23,9 @@ The main configuration object is `TelegratorOptions`. You can bind it directly f
 
 And in `Program.cs`:
 ```csharp
-builder.Services.Configure<TelegratorOptions>(
-    builder.Configuration.GetSection("Telegrator")
+builder.AddTelegrator(
+    options: new TelegratorOptions() { ... },
+    action: builder => builder.CollectHandlers()
 );
 ```
 
