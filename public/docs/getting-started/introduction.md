@@ -1,3 +1,7 @@
+---
+title: "Introduction"
+description: "Welcome to Telegrator — a modern framework for building Telegram bots in C#."
+---
 # Getting Started with Telegrator
 
 ![Telegrator Banner](https://raw.githubusercontent.com/Rikitav/Telegrator/master/resources/Telegrator_banner.png)

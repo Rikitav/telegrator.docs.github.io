@@ -19,17 +19,9 @@ dotnet add package Telegrator.Hosting.WideBot
 WideBot requires `api_id` and `api_hash` from [my.telegram.org](https://my.telegram.org).
 
 ```csharp
-using Telegrator.Hosting;
-
 var builder = Host.CreateApplicationBuilder(args);
 
-// 1. Add WideTelegrator
-builder.AddWideTelegrator();
-
-// 2. Configure credentials with SQLite persistence
-using Microsoft.Data.Sqlite;
-using System.Data.Common;
-
+// 1. Configure credentials
 builder.Services.ConfigureWideBot(new WideBotOptions(
     token: "BOT_TOKEN",
     apiId: 123456, 
@@ -39,16 +31,19 @@ builder.Services.ConfigureWideBot(new WideBotOptions(
 string appData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
 string database = Path.Combine(appData, "wtgb.db");
 
-builder.AddWideTelegrator(
-    dbConnectionFactory: _ => new SqliteConnection($"Data Source={database}"),
-    action: builder => builder.Handlers.CollectHandlers());
+builder.AddTelegrator() // 2. Add Telegrator
+    .WithWide(provider => new SqliteConnection($"Data Source={database}")) // 3. Add update receiving method
+    .Handlers.CollectHandlers(); // 4. Register handlers using source generator
 
 var app = builder.Build();
 
-// 3. Initialize WideBot
-app.UseWideTelegrator()
+// 5. Initialize Telegrator
+app.UseTelegrator()
    .Run();
 ```
+
+> [!CAUTION]
+> **Obsolete Method**: `AddWideTelegrator()` is now replaced by the `.WithWide()` extension in the unified fluent registration.
 
 ## Session Management
 WideBot uses `WTelegramBot` under the hood. It persists a session file (usually `session.dat`) to handle authentication. Ensure your application has write access to the folder where the session file is stored.

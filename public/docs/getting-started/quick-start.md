@@ -1,3 +1,8 @@
+---
+title: "Quick Start"
+description: "Create your first bot in minutes."
+---
+
 # Quick Start
 
 This section will get you up and running with Telegrator quickly. You'll learn the basics and create your first bot in minutes.
@@ -34,14 +39,17 @@ class Program
         // Option A: Manual registration
         bot.Handlers.AddHandler<HelloHandler>();
 
-        // Option B: Automatic discovery
-        bot.Handlers.CollectHandlersDomainWide();
+        // Option B: Generative discovery (Recommended for Native AOT)
+        bot.Handlers.CollectHandlers();
 
         bot.StartReceiving();
         Console.ReadLine();
     }
 }
 ```
+
+> [!TIP]
+> **Native AOT & Trimming**: Telegrator now fully supports Native AOT. The `CollectHandlers()` method is source-generated at compile-time, ensuring no reflection is used for discovery and no code is trimmed incorrectly.
 
 > **How is it working?**
 > 1. **`[MessageHandler]`**: Marks the class as a handler for message updates

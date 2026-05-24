@@ -1,9 +1,15 @@
+---
+title: "Troubleshooting & FAQ"
+description: "Resolving common issues and managing bugs."
+---
+
 # FAQ & Troubleshooting
 
 ## Common Issues
 
 ### Q: My handler is not being triggered. What should I do?
-- Check handler registration (use `bot.Handlers.AddHandler<MyHandler>()` or domain-wide collection)
+- Check handler registration (use `bot.Handlers.CollectHandlers()` generative method)
+- Check IDE for errors from **DeveloperHelperAnalyzer** (e.g. mismatched attributes and base classes)
 - Check filter attributes and update types
 - Enable debug logging
 - Verify that the handler class inherits from the correct base class

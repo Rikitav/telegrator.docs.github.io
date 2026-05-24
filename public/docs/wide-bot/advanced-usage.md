@@ -1,3 +1,8 @@
+---
+title: "Advanced WideBot Usage"
+description: "Media handling and raw TL calls in WideBot."
+---
+
 # Advanced WideBot Usage
 
 MTProto allows for much deeper interaction with Telegram's infrastructure, especially regarding media and large updates.
