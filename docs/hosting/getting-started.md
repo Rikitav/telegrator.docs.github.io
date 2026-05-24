@@ -22,18 +22,15 @@ using Telegrator.Hosting;
 
 var builder = Host.CreateApplicationBuilder(args);
 
-builder.AddTelegrator() // 1. Add Telegrator with Polling (Long-polling)
+builder.ConfigureReceiver(new ReceiverOptions() { ... });
+
+builder.AddTelegrator(options: new TelegratorOptions() { ... }) // 1. Add Telegrator with Polling (Long-polling)
     .WithPolling() // 2. Add update receiving method
     .Handlers.CollectHandlers(); // 3. Register handlers using source generator
 
-// 4. Configure your bot token
-builder.Services.Configure<TelegratorOptions>(options => {
-    options.Token = "YOUR_BOT_TOKEN";
-});
-
 var host = builder.Build();
 
-// 5. Initialize Telegrator
+// 4. Initialize Telegrator
 host.UseTelegrator();
 
 await host.RunAsync();
