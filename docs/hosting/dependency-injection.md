@@ -11,11 +11,32 @@ Telegrator is built for modern .NET applications where Dependency Injection is a
 
 By default, the registration methods in `builder.Handlers` manage lifetimes automatically:
 
-| Handler Type | Default Lifetime | Reason |
-| :--- | :--- | :--- |
-| **Standard Class Handlers** | `Scoped` | Allows injecting scoped services like EF Core `DbContext`. |
-| **Implicit (Static Methods)** | `Singleton` (Keyed) | Static methods don't have instances, proxy is singleton. |
-| **Singleton Handlers** | `Singleton` | If manually specified via `HandlerDescriptor`. |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Handler Type</th>
+      <th align="left">Default Lifetime</th>
+      <th align="left">Reason</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td align="left"><strong>Standard Class Handlers</strong></td>
+      <td align="left"><code>Scoped</code></td>
+      <td align="left">Allows injecting scoped services like EF Core <code>DbContext</code>.</td>
+    </tr>
+    <tr>
+      <td align="left"><strong>Implicit (Static Methods)</strong></td>
+      <td align="left"><code>Singleton</code> (Keyed)</td>
+      <td align="left">Static methods don't have instances, proxy is singleton.</td>
+    </tr>
+    <tr>
+      <td align="left"><strong>Singleton Handlers</strong></td>
+      <td align="left"><code>Singleton</code></td>
+      <td align="left">If manually specified via <code>HandlerDescriptor</code>.</td>
+    </tr>
+  </tbody>
+</table>
 
 ## Injecting Services
 

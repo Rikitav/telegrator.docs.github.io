@@ -15,10 +15,27 @@ dotnet add package Telegrator.Testing
 
 The package ships with two complementary APIs:
 
-| API | Target | Use Case |
-|-----|--------|----------|
-| `TestTelegratorClient` | `netstandard2.0` & `net10.0` | Stand-alone testing without the .NET Generic Host. |
-| `TelegratorTestServer` | `net10.0` only | Integration testing inside the full hosting pipeline (DI, logging, configuration). |
+<table>
+  <thead>
+    <tr>
+      <th align="left">API</th>
+      <th align="left">Target</th>
+      <th align="left">Use Case</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td align="left"><code>TestTelegratorClient</code></td>
+      <td align="left"><code>netstandard2.0</code> &amp; <code>net10.0</code></td>
+      <td align="left">Stand-alone testing without the .NET Generic Host.</td>
+    </tr>
+    <tr>
+      <td align="left"><code>TelegratorTestServer</code></td>
+      <td align="left"><code>net10.0</code> only</td>
+      <td align="left">Integration testing inside the full hosting pipeline (DI, logging, configuration).</td>
+    </tr>
+  </tbody>
+</table>
 
 Both APIs expose a **mocked `ITelegramBotClient`** (`ClientMock`) so you can verify that your handlers sent messages, edited keyboards, or performed any other Bot API call.
 
@@ -248,10 +265,27 @@ testServer.ClientMock.Verify(
 
 ## Summary
 
-| Scenario | Recommended API |
-|----------|-----------------|
-| Unit-test a single handler | Instantiate handler directly + mock `IHandlerContainer<T>` |
-| Test routing, filters & state without DI | `TestTelegratorClient` |
-| Test full hosting pipeline (DI, logging, scoped services) | `TelegratorTestServer` via `WithTestServer()` |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Scenario</th>
+      <th align="left">Recommended API</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td align="left">Unit-test a single handler</td>
+      <td align="left">Instantiate handler directly + mock <code>IHandlerContainer&lt;T&gt;</code></td>
+    </tr>
+    <tr>
+      <td align="left">Test routing, filters &amp; state without DI</td>
+      <td align="left"><code>TestTelegratorClient</code></td>
+    </tr>
+    <tr>
+      <td align="left">Test full hosting pipeline (DI, logging, scoped services)</td>
+      <td align="left"><code>TelegratorTestServer</code> via <code>WithTestServer()</code></td>
+    </tr>
+  </tbody>
+</table>
 
 The `Telegrator.Testing` package bridges the gap between isolated unit tests and slow, flaky production API tests, giving you fast, deterministic confidence in your bot's behavior.
