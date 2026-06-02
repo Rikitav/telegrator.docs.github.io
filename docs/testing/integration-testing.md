@@ -17,23 +17,11 @@ The package ships with two complementary APIs:
 
 <table>
   <thead>
-    <tr>
-      <th align="left">API</th>
-      <th align="left">Target</th>
-      <th align="left">Use Case</th>
-    </tr>
+    <tr><th>API</th><th>Target</th><th>Use Case</th></tr>
   </thead>
   <tbody>
-    <tr>
-      <td align="left"><code>TestTelegratorClient</code></td>
-      <td align="left"><code>netstandard2.0</code> &amp; <code>net10.0</code></td>
-      <td align="left">Stand-alone testing without the .NET Generic Host.</td>
-    </tr>
-    <tr>
-      <td align="left"><code>TelegratorTestServer</code></td>
-      <td align="left"><code>net10.0</code> only</td>
-      <td align="left">Integration testing inside the full hosting pipeline (DI, logging, configuration).</td>
-    </tr>
+    <tr><td><code>TestTelegratorClient</code></td><td><code>netstandard2.0</code> &amp; <code>net10.0</code></td><td>Stand-alone testing without the .NET Generic Host.</td></tr>
+    <tr><td><code>TelegratorTestServer</code></td><td><code>net10.0</code> only</td><td>Integration testing inside the full hosting pipeline (DI, logging, configuration).</td></tr>
   </tbody>
 </table>
 
@@ -112,7 +100,7 @@ Because the client is a Moq mock, you can verify any interaction:
 
 ```csharp
 testClient.ClientMock.Verify(
-    c => c.SendTextMessageAsync(
+    c => c.SendMessage(
         It.Is<ChatId>(id => id.Identifier == 123456),
         "Welcome!",
         It.IsAny<int?>(),
@@ -267,24 +255,12 @@ testServer.ClientMock.Verify(
 
 <table>
   <thead>
-    <tr>
-      <th align="left">Scenario</th>
-      <th align="left">Recommended API</th>
-    </tr>
+    <tr><th>Scenario</th><th>Recommended API</th></tr>
   </thead>
   <tbody>
-    <tr>
-      <td align="left">Unit-test a single handler</td>
-      <td align="left">Instantiate handler directly + mock <code>IHandlerContainer&lt;T&gt;</code></td>
-    </tr>
-    <tr>
-      <td align="left">Test routing, filters &amp; state without DI</td>
-      <td align="left"><code>TestTelegratorClient</code></td>
-    </tr>
-    <tr>
-      <td align="left">Test full hosting pipeline (DI, logging, scoped services)</td>
-      <td align="left"><code>TelegratorTestServer</code> via <code>WithTestServer()</code></td>
-    </tr>
+    <tr><td>Unit-test a single handler</td><td>Instantiate handler directly + mock <code>IHandlerContainer&lt;T&gt;</code></td></tr>
+    <tr><td>Test routing, filters &amp; state without DI</td><td><code>TestTelegratorClient</code></td></tr>
+    <tr><td>Test full hosting pipeline (DI, logging, scoped services)</td><td><code>TelegratorTestServer</code> via <code>WithTestServer()</code></td></tr>
   </tbody>
 </table>
 

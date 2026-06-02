@@ -13,28 +13,12 @@ By default, the registration methods in `builder.Handlers` manage lifetimes auto
 
 <table>
   <thead>
-    <tr>
-      <th align="left">Handler Type</th>
-      <th align="left">Default Lifetime</th>
-      <th align="left">Reason</th>
-    </tr>
+    <tr><th>Handler Type</th><th>Default Lifetime</th><th>Reason</th></tr>
   </thead>
   <tbody>
-    <tr>
-      <td align="left"><strong>Standard Class Handlers</strong></td>
-      <td align="left"><code>Scoped</code></td>
-      <td align="left">Allows injecting scoped services like EF Core <code>DbContext</code>.</td>
-    </tr>
-    <tr>
-      <td align="left"><strong>Implicit (Static Methods)</strong></td>
-      <td align="left"><code>Singleton</code> (Keyed)</td>
-      <td align="left">Static methods don't have instances, proxy is singleton.</td>
-    </tr>
-    <tr>
-      <td align="left"><strong>Singleton Handlers</strong></td>
-      <td align="left"><code>Singleton</code></td>
-      <td align="left">If manually specified via <code>HandlerDescriptor</code>.</td>
-    </tr>
+    <tr><td><strong>Standard Class Handlers</strong></td><td><code>Scoped</code></td><td>Allows injecting scoped services like EF Core <code>DbContext</code>.</td></tr>
+    <tr><td><strong>Implicit (Static Methods)</strong></td><td><code>Singleton</code> (Keyed)</td><td>Static methods don't have instances, proxy is singleton.</td></tr>
+    <tr><td><strong>Singleton Handlers</strong></td><td><code>Singleton</code></td><td>If manually specified via <code>HandlerDescriptor</code>.</td></tr>
   </tbody>
 </table>
 
